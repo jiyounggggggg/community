@@ -1,1 +1,1 @@
-#community app template
+# community app template
