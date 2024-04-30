@@ -10,6 +10,13 @@ import {
   TableRow,
 } from "~/components/ui/table";
 
+import type { Metadata } from 'next';
+ 
+// about 페이지에서 title 설정 예시
+export const metadata: Metadata = {
+  title: 'About',
+};
+
 export default function CategoryPage({
   params: { id: id },
 }: {

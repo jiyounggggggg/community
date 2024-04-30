@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 import { Menubar, MenubarMenu, MenubarTrigger } from "~/components/ui/menubar";
 import {
   Table,
@@ -7,6 +8,11 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table";
+
+export const metadata: Metadata = {
+  title: "Community",
+  description: "Community",
+};
 
 const invoices = [
   {
