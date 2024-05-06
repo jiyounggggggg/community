@@ -2,7 +2,6 @@ import "~/styles/globals.css";
 
 import { Inter } from "next/font/google";
 import Header from "~/components/ui/header";
-import NavigationMenu from "~/components/ui/navigationMenu";
 import { Metadata } from "next";
 
 const inter = Inter({
@@ -18,12 +17,12 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: "NEXT JS SEO",
-    template: "%s | NEXT JS SEO",
+    default: "My Community",
+    template: "%s | My Community",
   },
 
   description: "NEXT JS SEO",
-  robots: "index, follow",
+  // robots: "index, follow", # 기본값
 
   openGraph: {
     title: "NEXT JS SEO",
@@ -75,10 +74,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`font-sans ${inter.variable}`}>
+      <body className={`mx-auto w-4/5 font-sans ${inter.variable}`}>
         <Header />
-        <NavigationMenu />
-        {children}
+        <main>{children}</main>
       </body>
     </html>
   );
