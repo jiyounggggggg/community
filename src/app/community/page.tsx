@@ -130,7 +130,7 @@ export function CommunityNav() {
         >
           community categories
         </h1>
-        <a href="/community" className="basis-1/3 border py-1">
+        <a href="/board" className="basis-1/3 border py-1">
           팰월드 인벤
         </a>
         <a href="/community" className="basis-1/3 border py-1">
