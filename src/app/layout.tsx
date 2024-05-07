@@ -3,6 +3,7 @@ import "~/styles/globals.css";
 import { Inter } from "next/font/google";
 import Header from "~/components/ui/header";
 import { Metadata } from "next";
+import Nav from "~/components/ui/nav";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -72,10 +73,12 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+
   return (
     <html lang="en">
       <body className={`mx-auto w-4/5 font-sans ${inter.variable}`}>
         <Header />
+        <Nav />
         <main>{children}</main>
       </body>
     </html>
