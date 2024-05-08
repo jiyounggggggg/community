@@ -1,16 +1,59 @@
-import { Metadata } from "next";
+"use client";
+import { useState } from "react";
+// import { Metadata } from "next";
+// import { useRouter } from "next/router";
 import Dropdown from "~/components/ui/dropdown";
-
-export const metadata: Metadata = {
-  title: "board",
-  description: "board",
-};
+import QuillEditor from "~/components/ui/quillEditor";
+// export const metadata: Metadata = {
+//   title: "board",
+//   description: "board",
+// };
 
 export default function BoardPage() {
+  const [title, setTitle] = useState("");
+  // const [author, setAuthor] = useState("");
+  const [content, setContent] = useState("");
+  const [error, setError] = useState("");
+  // const router = useRouter();
+
+  const handleContentChange = (content: string) => {
+    setContent(content);
+  };
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!title || !content) {
+      setError("값를 입력해보세요");
+      return;
+    }
+    const response = await fetch("http://localhost:8000/api/post/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        title,
+        content,
+    })})
+
+    if (response.ok) {
+      const post = await response.json();
+      console.log('Post created',post);
+
+      // router.push('/community');
+    }else{
+      console.error('Error creating post');
+      setError('error');
+    }
+  }
+
   const options = [
-    { value: "option1", label: "Option 1" },
-    { value: "option2", label: "Option 2" },
-    { value: "option3", label: "Option 3" },
+    { value: "카테고리 선택", label: "카테고리 선택" },
+    { value: "잡담", label: "잡담" },
+    { value: "질문", label: "질문" },
+    { value: "소식", label: "소식" },
+    { value: "멀티", label: "멀티" },
+    { value: "기타", label: "기타" },
   ];
 
   return (
@@ -67,15 +110,23 @@ export default function BoardPage() {
         <h1 className="mb-2 h-10 bg-slate-300 text-center leading-10">
           글쓰기
         </h1>
-        <form>
+        <form onSubmit={handleSubmit}>
           <div>
             <Dropdown options={options} />
             <input
               type="text"
               name="title"
-              placeholder="title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="제목을 입력해주세요"
               className="mb-2 w-full border p-1"
             ></input>
+            <div>
+              <QuillEditor onContentChange={handleContentChange} />
+            </div>
+            <button className="mt-2 w-full border p-1" type="submit">
+              등록
+            </button>
           </div>
         </form>
       </section>
