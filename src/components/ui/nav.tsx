@@ -3,13 +3,13 @@ export default function Nav() {
   
   function test(){
     console.log("test");
-    document.getElementById("nav")?.classList.add("close");
-    document.getElementById("nav")?.classList.remove("open");
+    document.getElementById("navMain")?.classList.add("close");
+    document.getElementById("navMain")?.classList.remove("open");
   }
 
   return (
     <>
-      <nav id="nav" className="absolute left-0 top-0 h-screen w-1/4 bg-white text-sm nav">
+      <nav id="navMain" className="absolute left-0 top-0 h-screen w-1/4 bg-white text-sm nav">
         <h1 className="flex h-10 justify-between bg-slate-400">
           <a href="/" className="inline-flex items-center">
             <img src="/icons/login.svg" alt="logo" className="h-5 px-1" />

@@ -9,9 +9,9 @@ const ReactQuill = dynamic<ReactQuillProps>(() => import("react-quill"), {
   loading: () => <p>Loading...</p>,
 }) as React.ComponentType<ReactQuillProps>;
 
-interface QuillEditorProps {
-    onContentChange?: (content: string) => void;
-}
+// interface QuillEditorProps {
+//     onContentChange?: (content: string) => void;
+// }
 
 const modules = {
   toolbar: [

@@ -11,7 +11,7 @@ import QuillEditor from "~/components/ui/quillEditor";
 
 export default function BoardPage() {
   const [title, setTitle] = useState("");
-  // const [author, setAuthor] = useState("");
+  const [author, setAuthor] = useState("Jiyoung");
   const [content, setContent] = useState("");
   const [error, setError] = useState("");
   // const router = useRouter();
@@ -26,6 +26,8 @@ export default function BoardPage() {
       setError("값를 입력해보세요");
       return;
     }
+
+    // Django API 호출
     const response = await fetch("http://localhost:8000/api/post/", {
       method: "POST",
       headers: {
@@ -33,19 +35,21 @@ export default function BoardPage() {
       },
       body: JSON.stringify({
         title,
+        author,
         content,
-    })})
+      }),
+    });
 
     if (response.ok) {
       const post = await response.json();
-      console.log('Post created',post);
+      console.log("Post created", post);
 
       // router.push('/community');
-    }else{
-      console.error('Error creating post');
-      setError('error');
+    } else {
+      console.error("Error creating post");
+      setError("error");
     }
-  }
+  };
 
   const options = [
     { value: "카테고리 선택", label: "카테고리 선택" },
@@ -124,7 +128,7 @@ export default function BoardPage() {
             <div>
               <QuillEditor onContentChange={handleContentChange} />
             </div>
-            <button className="mt-2 w-full border p-1" type="submit">
+            <button className="mt-2 w-full border p-1 hover:bg-slate-200 rounded-md" type="submit">
               등록
             </button>
           </div>
