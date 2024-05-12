@@ -12,7 +12,7 @@ export default function NavigationMenu() {
           <img src="/favicon.ico" alt="menu1" className="" />
           커뮤니티
         </a>
-        <a href="/category/3" className="basis-1/4 flex flex-col items-center">
+        <a href="/board/list" className="basis-1/4 flex flex-col items-center">
           <img src="/favicon.ico" alt="menu1" className="" />
           팟벤
         </a>

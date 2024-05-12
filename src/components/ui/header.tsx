@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFacebook, faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
+import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 
 const SocialLoginButton = () => (
   <>
@@ -104,12 +105,18 @@ export default function Header() {
         <li>
           <ul className="flex">
             <li className="flex items-center">
-              <button
+              {/* <button
                 className="rounded p-1 hover:bg-slate-200"
                 onClick={handleShow}
               >
                 <img src="/icons/login.svg" alt="login" className="h-6" />
-              </button>
+              </button> */}
+              <SignedOut>
+                <SignInButton />
+              </SignedOut>
+              <SignedIn>
+                <UserButton afterSignOutUrl="/" />
+              </SignedIn>
             </li>
             <li className="flex items-center">
               <button className="rounded p-1 hover:bg-slate-200">
@@ -140,7 +147,7 @@ export default function Header() {
       </div>
 
       <div className={show ? "" : "hidden"}>
-        <div className="fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center">
+        <div className="fixed bottom-0 left-0 right-0 top-0 flex items-center justify-center">
           <div className="fixed bottom-0 left-0 right-0 top-0 bg-black opacity-50"></div>
           <div className="fixed w-full max-w-lg rounded bg-white p-5 shadow">
             <button

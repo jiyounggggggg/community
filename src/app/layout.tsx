@@ -5,6 +5,7 @@ import { Inter } from "next/font/google";
 import Header from "~/components/ui/header";
 import { Metadata } from "next";
 import Nav from "~/components/ui/nav";
+import { ClerkProvider } from "@clerk/nextjs";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -76,6 +77,7 @@ export default function RootLayout({
 }) {
 
   return (
+    <ClerkProvider>
     <html lang="en">
       <body className={`mx-auto w-4/5 font-sans ${inter.variable}`}>
         <Header />
@@ -83,5 +85,6 @@ export default function RootLayout({
         <main>{children}</main>
       </body>
     </html>
+    </ClerkProvider>
   );
 }
