@@ -125,7 +125,7 @@ export default function BoardPage() {
               placeholder="제목을 입력해주세요"
               className="mb-2 w-full border p-1"
             ></input>
-            <div>
+            <div className="">
               <QuillEditor onContentChange={handleContentChange} />
             </div>
             <button className="mt-2 w-full border p-1 hover:bg-slate-200 rounded-md" type="submit">

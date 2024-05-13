@@ -1,14 +1,26 @@
 "use client";
+import { useUser } from "@clerk/nextjs";
 import { useState } from "react";
 import Dropdown from "~/components/ui/dropdown";
 import QuillEditor from "~/components/ui/quillEditor";
 
 export default function BoardPage() {
+  const { isLoaded, isSignedIn, user } = useUser();
   const [title, setTitle] = useState("");
-  const [author, setAuthor] = useState("Jiyoung");
+  // const [author, setAuthor] = useState("");
   const [content, setContent] = useState("");
   const [error, setError] = useState("");
+
+  const author = user?.primaryEmailAddress?.emailAddress
+  // setAuthor(userId);
+
+  // setAuthor(user?.primaryEmailAddress?.emailAddress);
+
+  console.log("1: ", author);
+  console.log("2: ", user?.primaryEmailAddress?.emailAddress);
   // const router = useRouter();
+
+  // console.log("user: ", user?.primaryEmailAddress?.emailAddress);
 
   const handleContentChange = (content: string) => {
     setContent(content);
@@ -16,10 +28,15 @@ export default function BoardPage() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    // Validation
     if (!title || !content) {
-      setError("값를 입력해보세요");
+      // setError("값를 입력해보세요");
+      alert("값를 입력해보세요");
       return;
     }
+
+    console.log("title: ", title, "author: ", author, "content: ", content);
 
     // Django API 호출
     const response = await fetch("http://localhost:8000/api/post/", {
@@ -27,6 +44,7 @@ export default function BoardPage() {
       headers: {
         "Content-Type": "application/json",
       },
+
       body: JSON.stringify({
         title,
         author,

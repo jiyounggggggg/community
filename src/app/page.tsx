@@ -1,5 +1,6 @@
 "use client";
 import axios from "axios";
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import NavigationMenu from "~/components/ui/navigationMenu";
@@ -45,7 +46,9 @@ export default function HomePage() {
         <div className="flex">
           <a href="/category/news" className="basis-1/5 p-2">
             <figure className="text-center">
-              <img
+              <Image
+                width={400}
+                height={400}
                 src="/noidea.jpeg"
                 alt="noidea"
                 className="h-auto w-full rounded-3xl"
@@ -55,7 +58,9 @@ export default function HomePage() {
           </a>
           <a href="/category/news" className="basis-1/5 p-2">
             <figure className="text-center">
-              <img
+              <Image
+                width={400}
+                height={400}
                 src="/noidea.jpeg"
                 alt="noidea"
                 className="h-auto w-full rounded-3xl"
@@ -65,7 +70,9 @@ export default function HomePage() {
           </a>
           <a href="/category/news" className="basis-1/5 p-2">
             <figure className="text-center">
-              <img
+              <Image
+                width={400}
+                height={400}
                 src="/noidea.jpeg"
                 alt="noidea"
                 className="h-auto w-full rounded-3xl"
@@ -75,7 +82,9 @@ export default function HomePage() {
           </a>
           <a href="/category/news" className="basis-1/5 p-2">
             <figure className="text-center">
-              <img
+              <Image
+                width={400}
+                height={400}
                 src="/noidea.jpeg"
                 alt="noidea"
                 className="h-auto w-full rounded-3xl"
@@ -85,7 +94,9 @@ export default function HomePage() {
           </a>
           <a href="/category/news" className="basis-1/5 p-2">
             <figure className="text-center">
-              <img
+              <Image
+                width={400}
+                height={400}
                 src="/noidea.jpeg"
                 alt="noidea"
                 className="h-auto w-full rounded-3xl"
@@ -99,7 +110,13 @@ export default function HomePage() {
       <aside className="bg-slate-50">
         <h2>광고</h2>
         <div className="flex items-center justify-center">
-          <img src="/noidea.jpeg" className="h-28"></img>
+          <Image
+            src="/noidea.jpeg"
+            className="h-28"
+            alt="noidea"
+            width={400}
+            height={400}
+          ></Image>
           나는 아무 생각이 없다
         </div>
       </aside>
