@@ -1,4 +1,7 @@
-const posts = [
+import Link from "next/link";
+import React from "react";
+
+const post1 = [
   {
     id: 1,
     title: "크로아 벨라헤어 매물 찾습니다 + 버거뿌림",
@@ -22,9 +25,22 @@ const posts = [
   },
 ];
 
-export function Board() {
+async function fetchPosts() {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts/`);
+  if (!res.ok) {
+    throw new Error("Failed to fetch posts");
+  }
+
+  return res.json();
+}
+
+export default async function Page() {
+  const posts = await fetchPosts();
+
   return (
     <>
+      {/* <Board /> */}
+
       <section>
         <h1 className="my-4">
           <strong>커뮤니티 이슈 모아보기! 오늘의 핫벤</strong>
@@ -32,27 +48,19 @@ export function Board() {
         <a href="/board/post">
           <button className="border">글쓰기</button>
         </a>
-        <ol className="list-none p-0">
+        <ul>
           {posts.map((post) => (
-            <li className="border-t p-1 last:border-b">
-              <a href={"/board/" + post.id} key={post.id} className="inline-flex">
+            <li key={post.id} className="border-t p-1 last:border-b">
+              <Link href={`/board/${post.id}`} className="inline-flex">
                 <b className="pr-2 text-red-600">{post.id}</b>
-                <small className="text-slate-500">{post.category}</small>
+                <small className="text-slate-500">category</small>
                 <h2 className="pl-2">{post.title}</h2>
-                <small className="pl-2 text-red-600">[{post.comments}]</small>
-              </a>
+                <small className="pl-2 text-red-600">[10]</small>
+              </Link>
             </li>
           ))}
-        </ol>
+        </ul>
       </section>
-    </>
-  );
-}
-
-export default function Page() {
-  return (
-    <>
-      <Board />
     </>
   );
 }
