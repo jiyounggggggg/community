@@ -1,24 +1,20 @@
-"use client";
-import axios from "axios";
 import Image from "next/image";
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import NavigationMenu from "~/components/ui/navigationMenu";
+import NavigationMenu from "~/components/layout/navigationMenu";
 
 export default function HomePage() {
-  const [messages, setMessages] = useState<{ id: number; text: string }[]>([]);
+  // const [messages, setMessages] = useState<{ id: number; text: string }[]>([]);
 
-  useEffect(() => {
-    axios
-      .get("http://localhost:8000/api/messages")
-      .then((res) => {
-        console.log(res.data);
-        setMessages(res.data);
-      })
-      .catch((err) => {
-        console.error("Error fetching data: ", err);
-      });
-  }, []);
+  // useEffect(() => {
+  //   axios
+  //     .get("http://localhost:8000/api/messages")
+  //     .then((res) => {
+  //       console.log(res.data);
+  //       setMessages(res.data);
+  //     })
+  //     .catch((err) => {
+  //       console.error("Error fetching data: ", err);
+  //     });
+  // }, []);
 
   return (
     <>

@@ -1,77 +1,6 @@
-"use client";
-import { useUser } from "@clerk/nextjs";
-import { useState } from "react";
-import Dropdown from "~/components/ui/dropdown";
 import QuillEditor from "~/components/ui/quillEditor";
 
 export default function BoardPage() {
-  const { isLoaded, isSignedIn, user } = useUser();
-  const [title, setTitle] = useState("");
-  // const [author, setAuthor] = useState("");
-  const [content, setContent] = useState("");
-  const [error, setError] = useState("");
-
-  const author = user?.primaryEmailAddress?.emailAddress
-  // setAuthor(userId);
-
-  // setAuthor(user?.primaryEmailAddress?.emailAddress);
-
-  console.log("1: ", author);
-  console.log("2: ", user?.primaryEmailAddress?.emailAddress);
-  // const router = useRouter();
-
-  // console.log("user: ", user?.primaryEmailAddress?.emailAddress);
-
-  const handleContentChange = (content: string) => {
-    setContent(content);
-  };
-
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    // Validation
-    if (!title || !content) {
-      // setError("값를 입력해보세요");
-      alert("값를 입력해보세요");
-      return;
-    }
-
-    console.log("title: ", title, "author: ", author, "content: ", content);
-
-    // Django API 호출
-    const response = await fetch("http://localhost:8000/api/post/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-
-      body: JSON.stringify({
-        title,
-        author,
-        content,
-      }),
-    });
-
-    if (response.ok) {
-      const post = await response.json();
-      console.log("Post created", post);
-
-      // router.push('/community');
-    } else {
-      console.error("Error creating post");
-      setError("error");
-    }
-  };
-
-  const options = [
-    { value: "카테고리 선택", label: "카테고리 선택" },
-    { value: "잡담", label: "잡담" },
-    { value: "질문", label: "질문" },
-    { value: "소식", label: "소식" },
-    { value: "멀티", label: "멀티" },
-    { value: "기타", label: "기타" },
-  ];
-
   return (
     <>
       <nav className="flex flex-col">
@@ -122,30 +51,7 @@ export default function BoardPage() {
         </ul>
       </nav>
 
-      <section>
-        <h1 className="mb-2 h-10 bg-slate-300 text-center leading-10">
-          글쓰기
-        </h1>
-        <form onSubmit={handleSubmit}>
-          <div>
-            <Dropdown options={options} />
-            <input
-              type="text"
-              name="title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder="제목을 입력해주세요"
-              className="mb-2 w-full border p-1"
-            ></input>
-            <div>
-              <QuillEditor onContentChange={handleContentChange} />
-            </div>
-            <button className="mt-2 w-full border p-1 hover:bg-slate-200 rounded-md" type="submit">
-              등록
-            </button>
-          </div>
-        </form>
-      </section>
+      <QuillEditor />
     </>
   );
 }

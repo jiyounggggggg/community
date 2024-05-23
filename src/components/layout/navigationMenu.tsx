@@ -1,4 +1,4 @@
-import { Menubar, MenubarMenu, MenubarTrigger } from "./menubar";
+import { Menubar, MenubarMenu, MenubarTrigger } from "../ui/menubar";
 
 export default function NavigationMenu() {
   return (
@@ -8,7 +8,7 @@ export default function NavigationMenu() {
           <img src="/favicon.ico" alt="menu1" className="" />
           뉴스
         </a>
-        <a href="/community" className="basis-1/4 flex flex-col items-center">
+        <a href="/boards" className="basis-1/4 flex flex-col items-center">
           <img src="/favicon.ico" alt="menu1" className="" />
           커뮤니티
         </a>
