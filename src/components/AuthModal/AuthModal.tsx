@@ -1,12 +1,51 @@
+"use client";
+
 import React from "react";
 import styles from "./AuthModal.module.css";
 import Link from "next/link";
 import { faFacebook, faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { createUser } from "~/utils/api/users";
 
-interface AuthModalProps {}
+// interface AuthModalProps { }
 
 const AuthModal: React.FC<AuthModalProps> = () => {
+  const [formData, setFormData] = React.useState({
+    email: "",
+    username: "",
+    password: "",
+    phone_number: "",
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value
+    });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (formData.email.trim() === '') {
+      alert('email을 입력해주세요.');
+      return;
+    }
+
+    try {
+      await createUser(formData);
+      setFormData({
+        email: "",
+        username: "",
+        password: "",
+        phone_number: "",
+      })
+    } catch (error) {
+      console.error('Error creating user:', error);
+      alert('사용자 등록 중 오류가 발생했습니다.');
+    }
+  };
+
   return (
     <div className={styles.modalBackground}>
       <div className={styles.modalContent}>
@@ -51,57 +90,57 @@ const AuthModal: React.FC<AuthModalProps> = () => {
           <hr className={styles.line} />
         </div>
 
-        <form>
+        <form onSubmit={handleSubmit}>
           <ul>
             <li className={styles.inputGroup}>
-              <label className={`${styles.label} ${styles.focused}`}>
-                Email<span className={styles.required}>*</span>
-              </label>
+              <label htmlFor="email" className={`${styles.label} ${styles.focused}`}>Email<span className={styles.required}>*</span></label>
               <input
                 type="email"
-                name="Email"
+                name="email"
                 className={styles.input}
+                value={formData.email}
+                onChange={handleChange}
                 // onFocus={() => handleFocus("username")}
                 // onBlur={() => handleBlur("username")}
                 required
               />
             </li>
             <li className={styles.inputGroup}>
-              <label className={`${styles.label} ${styles.focused}`}>
-                Username<span className={styles.required}>*</span>
-              </label>
+              <label htmlFor="username" className={`${styles.label} ${styles.focused}`}>Username<span className={styles.required}>*</span></label>
               <input
                 type="text"
                 name="username"
                 className={styles.input}
+                value={formData.username}
+                onChange={handleChange}
                 // onFocus={() => handleFocus("username")}
                 // onBlur={() => handleBlur("username")}
                 required
               />
             </li>
             <li className={styles.inputGroup}>
-              <label className={`${styles.label} ${styles.focused}`}>
-                Password<span className={styles.required}>*</span>
-              </label>
+              <label htmlFor="password" className={`${styles.label} ${styles.focused}`}>Password<span className={styles.required}>*</span></label>
               <input
                 type="password"
                 name="password"
                 className={styles.input}
+                value={formData.password}
+                onChange={handleChange}
                 // onFocus={() => handleFocus("username")}
                 // onBlur={() => handleBlur("username")}
                 required
               />
             </li>
             <li className={styles.inputGroup}>
-              <label className={`${styles.label} ${styles.focused}`}>
-                Phone Number
-              </label>
+              <label htmlFor="phone_number" className={`${styles.label} ${styles.focused}`}>Phone Number</label>
               <input
                 type="digits"
-                name="phoneNumber"
+                name="phone_number"
                 className={styles.input}
-                // onFocus={() => handleFocus("username")}
-                // onBlur={() => handleBlur("username")}
+                value={formData.phone_number}
+                onChange={handleChange}
+              // onFocus={() => handleFocus("username")}
+              // onBlur={() => handleBlur("username")}
               />
             </li>
           </ul>
@@ -112,10 +151,11 @@ const AuthModal: React.FC<AuthModalProps> = () => {
               Log In
             </Link>
           </small>
+
           <button
             type="submit"
             className={`${styles.submitButton} ${styles.active}`}
-            // disabled={!isFormValid}
+          // disabled={!isFormValid}
           >
             Sign Up
             {/* {isSignup ? 'Sign Up' : 'Sign In'} */}

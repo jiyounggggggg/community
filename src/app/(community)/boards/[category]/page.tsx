@@ -10,7 +10,6 @@ async function fetchPosts(category: string) {
       'Pragma': 'no-cache',
     },
   });
-  console.log("AA");
   if (!res.ok) {
     throw new Error("Failed to fetch posts");
   }
