@@ -36,7 +36,7 @@ export default function HomePage() {
             alt="logo"
             className="mr-2.5 inline-block h-6"
           />
-          Hot Issue
+          Hot Issues
         </h1>
 
         <div className="flex">

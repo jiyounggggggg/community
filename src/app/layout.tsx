@@ -78,13 +78,34 @@ export default function RootLayout({
 
   return (
     <ClerkProvider>
-    <html lang="en">
-      <body className={`mx-auto w-4/5 font-sans mb-4 ${inter.variable}`}>
-        <Header />
-        <Nav />
-        <main>{children}</main>
-      </body>
-    </html>
+      <html lang="en">
+        <body className={`mx-auto w-4/5 font-sans mb-4 ${inter.variable}`}>
+          <Header />
+          <Nav />
+          <main>{children}</main>
+          <div className="modal-background fixed top-0 left-0 w-full h-full bg-black opacity-50 z-50">
+            <div className="bg-white p-5 rounded-xl shadow w-full">
+              <h2>Sign Up</h2>
+              <form>
+                <label>
+                  Username:
+                  <input type="text" name="username" />
+                </label>
+                <label>
+                  Email:
+                  <input type="email" name="email" />
+                </label>
+                <label>
+                  Password:
+                  <input type="password" name="password" />
+                </label>
+                <button type="submit">Sign Up</button>
+              </form>
+              <button>Close</button>
+            </div>
+          </div>
+        </body>
+      </html>
     </ClerkProvider>
   );
 }

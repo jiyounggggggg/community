@@ -102,6 +102,7 @@ export default async function PostPage({ params, }: { params: { category: string
         </header>
 
         <section className="my-5" dangerouslySetInnerHTML={{ __html: post.content }}></section>
+        
         <section className="text-center mb-2">
           <button className="border rounded-full p-2 hover:text-sky-600 text-slate-600">
             <FontAwesomeIcon icon={faThumbsUp} />
