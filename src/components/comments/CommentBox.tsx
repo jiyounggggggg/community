@@ -6,12 +6,12 @@ import styles from './Comment.module.css';
 
 interface CommentBoxProps {
     postId: number;
-    author: number;
-    parent?: number;
+    author: string;
+    parent: number | undefined;
     onCommentAdded: () => void;
 }
 
-const CommentBox: React.FC<CommentBoxProps> = ({ postId, author, onCommentAdded }) => {
+const CommentBox: React.FC<CommentBoxProps> = ({ postId, author, parent, onCommentAdded }) => {
     const [content, setContent] = useState('');
 
     const handleSubmit = async () => {
@@ -22,7 +22,6 @@ const CommentBox: React.FC<CommentBoxProps> = ({ postId, author, onCommentAdded 
 
         try {
             await createComment({ post: postId, author, content, parent });
-            // (content: { post: number; author: number; content: string; parent?: number })
             setContent('');
             onCommentAdded();
         } catch (error) {
