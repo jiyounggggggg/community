@@ -1,11 +1,11 @@
 import "~/styles/globals.css";
 import "react-quill/dist/quill.snow.css";
-
 import { Inter } from "next/font/google";
 import Header from "~/components/layout/header";
 import { Metadata } from "next";
 import Nav from "~/components/layout/nav";
 import { ClerkProvider } from "@clerk/nextjs";
+import AuthModal from "~/components/AuthModal/AuthModal";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -83,27 +83,7 @@ export default function RootLayout({
           <Header />
           <Nav />
           <main>{children}</main>
-          <div className="modal-background fixed top-0 left-0 w-full h-full bg-black opacity-50 z-50">
-            <div className="bg-white p-5 rounded-xl shadow w-full">
-              <h2>Sign Up</h2>
-              <form>
-                <label>
-                  Username:
-                  <input type="text" name="username" />
-                </label>
-                <label>
-                  Email:
-                  <input type="email" name="email" />
-                </label>
-                <label>
-                  Password:
-                  <input type="password" name="password" />
-                </label>
-                <button type="submit">Sign Up</button>
-              </form>
-              <button>Close</button>
-            </div>
-          </div>
+          <AuthModal />
         </body>
       </html>
     </ClerkProvider>
