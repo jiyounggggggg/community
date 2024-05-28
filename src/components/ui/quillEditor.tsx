@@ -42,7 +42,8 @@ const QuillEditor: FC = () => {
   // const [author, setAuthor] = useState("");
   const [content, setContent] = useState("");
   const [error, setError] = useState("");
-  const author = user?.primaryEmailAddress?.emailAddress;
+  // const author = user?.primaryEmailAddress?.emailAddress;
+  const author = "test";
   const options = [
     { value: "카테고리 선택", label: "카테고리 선택" },
     { value: "잡담", label: "잡담" },

@@ -5,7 +5,6 @@ import Header from "~/components/layout/header";
 import { Metadata } from "next";
 import Nav from "~/components/layout/nav";
 import { ClerkProvider } from "@clerk/nextjs";
-import AuthModal from "~/components/AuthModal/AuthModal";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -83,7 +82,6 @@ export default function RootLayout({
           <Header />
           <Nav />
           <main>{children}</main>
-          <AuthModal />
         </body>
       </html>
     </ClerkProvider>

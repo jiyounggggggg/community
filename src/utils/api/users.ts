@@ -8,3 +8,8 @@ export const createUser = async (data: { email: string; username: string; passwo
     return response.data;
 };
 
+// 로그인
+export const login = async (data: { username: string; password: string }) => {
+    const response = await axios.post(`${API_URL}/token/`, data);
+    return response.data;
+};
