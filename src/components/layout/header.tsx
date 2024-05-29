@@ -25,8 +25,7 @@ export default function Header() {
 
   // 사용자
   const [user, setUser] = useState(false);
-  const token = localStorage.getItem("access");
-  console.log("token: ", token);
+  const token = typeof window !== "undefined" && localStorage.getItem("access");
 
   useEffect(() => {
     const fetchUser = async () => {

@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function CommunityLayout({
   children,
 }: {
@@ -9,13 +11,15 @@ export default function CommunityLayout({
         <h1 className="sr-only">main categories</h1>
         <ul className="flex gap-4">
           <li>
-            <img src="/favicon.ico" alt="logo" className="h-6" />
+            <Link href="/">
+              <img src="/favicon.ico" alt="logo" className="h-6" />
+            </Link>
           </li>
           <li>
             <a href="/">뉴스</a>
           </li>
           <li>
-            <a href="/boards/category">커뮤니티</a>
+            <a href="/boards">커뮤니티</a>
           </li>
           <li>
             <a href="/">팟벤</a>
