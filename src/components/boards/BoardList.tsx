@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { BoardData, getBoards } from "~/utils/api/boards";
+import type { BoardData } from "~/utils/api/boards";
+import { getBoards } from "~/utils/api/boards";
 
 const BoardList = async () => {
   const boards = await getBoards();

@@ -2,10 +2,10 @@ import { fetchComments } from '~/utils/api';
 import type { Comment } from '~/utils/api';
 import CommentList from '~/components/comments/CommentList';
 import Link from 'next/link';
-import Profile from '~/components/Profile/Profile';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 import { auth } from '@clerk/nextjs/server';
+import PostDetail from '~/components/posts/PostDetail';
+import { getPost } from '~/utils/api/posts';
+import { getUserProfile } from '~/utils/api/users';
 
 interface PostPageProps {
   params: {
@@ -21,26 +21,16 @@ export async function generateMetadata({ params }: PostPageProps) {
 }
 
 // todo fetchPost
-async function fetchPost(category: string, postId: string) {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/posts/${postId}/`,
-    {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      cache: "no-store",
-    },
-  );
-
-  if (!res.ok) {
-    throw new Error("Failed to fetch post");
-  }
-  return res.json();
-}
 
 const PostPage: React.FC<PostPageProps> = async ({ params }) => {
+  const token = typeof window !== 'undefined' ? localStorage.getItem('access') : null;
+  console.log("typeof window: ", typeof window);
+  console.log("token: ", token);
+  const user = token ? await getUserProfile(token) : null;
+  console.log("user: ", user);
+
   const postId = Number(params['post-id']);
-  const post = await fetchPost(params.category, params["post-id"]); // todo fetchPost
+  const post = await getPost(params.category, params["post-id"]); // todo fetchPost
   const initialComments: Comment[] = await fetchComments(postId);   // 댓글
   const { userId } = auth();                                        // 로그인 정보
 
@@ -52,31 +42,7 @@ const PostPage: React.FC<PostPageProps> = async ({ params }) => {
         </Link>
       </section>
 
-      <article>
-        <header className="border-y flex flex-col gap-2 p-3">
-          <Link href={`/boards/${params.category}`} className="text-slate-500">{params.category}</Link>
-          <h1 className=""><strong className="text-2xl">{post.title}</strong></h1>
-          <div className="flex">
-            <Profile src="/noidea.jpeg" alt="Profile Image" size={40} />
-            <div className="flex flex-col mx-3">
-              <b className="text-sm">{post.author}</b>
-              <div className="flex">
-                <time id="publish-date" dateTime={post.created_at} className="text-slate-400 text-sm">{post.created_at}</time>
-                <small className="text-slate-400 ml-3">조회 110</small>
-              </div>
-            </div>
-          </div>
-        </header>
-
-        <div className="my-5" dangerouslySetInnerHTML={{ __html: post.content }}></div>
-
-        <footer className="text-center mb-2">
-          <button className="border rounded-full p-2 hover:text-sky-600 text-slate-600">
-            <FontAwesomeIcon icon={faThumbsUp} />
-            <b className="ml-1">101</b>
-          </button>
-        </footer>
-      </article>
+      <PostDetail boradName={params.category} post={post} />
 
       <section>
         <CommentList initialComments={initialComments} postId={postId} author={userId} />

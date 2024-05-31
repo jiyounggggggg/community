@@ -1,5 +1,5 @@
 import { getPosts } from "~/utils/api/posts";
-import type { PostData } from "~/utils/api/posts";
+import type { Post } from "~/utils/api/posts";
 import Link from "next/link";
 
 interface PostListProps {
@@ -11,7 +11,7 @@ const PostList: React.FC<PostListProps> = async ({ boardId }) => {
 
   return (
     <ul className="mb-2">
-      {posts.map((post: PostData, index: number) => (
+      {posts.map((post: Post, index: number) => (
         <li key={post.id} className="border-t p-1 last:border-b">
           <Link href={`/boards/1/${post.id}`} className="inline-flex">
             <b className="pr-2 text-red-600">{index + 1}</b>

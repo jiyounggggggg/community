@@ -23,9 +23,20 @@ export const login = async (data: { username: string; password: string }) => {
 // 사용자 정보 가져오기
 export const getUserProfile = async (token: string) => {
   const response = await apiClient.get("/users/me/", {
+    withCredentials: true,
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
   return response.data;
+};
+
+export const fetchCurrentUser = async () => {
+  try {
+    const response = await apiClient.get('users/me/', { withCredentials: true });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching current user:', error);
+    return null;
+  }
 };
