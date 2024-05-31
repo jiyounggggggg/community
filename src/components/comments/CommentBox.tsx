@@ -6,12 +6,12 @@ import styles from './Comment.module.css';
 
 interface CommentBoxProps {
     postId: number;
-    author: string;
+    user: string;
     parent: number | undefined;
     onCommentAdded: () => void;
 }
 
-const CommentBox: React.FC<CommentBoxProps> = ({ postId, author, parent, onCommentAdded }) => {
+const CommentBox: React.FC<CommentBoxProps> = ({ postId, user, parent, onCommentAdded }) => {
     const [content, setContent] = useState('');
 
     const handleSubmit = async () => {
@@ -21,9 +21,9 @@ const CommentBox: React.FC<CommentBoxProps> = ({ postId, author, parent, onComme
         }
 
         try {
-            await createComment({ post: postId, author, content, parent });
+            await createComment({ post: postId, created_by: user, content, parent });
             setContent('');
-            onCommentAdded();
+            onCommentAdded(parent);
         } catch (error) {
             console.error('Error creating comment:', error);
             alert('댓글 작성 중 오류가 발생했습니다.');
@@ -32,7 +32,7 @@ const CommentBox: React.FC<CommentBoxProps> = ({ postId, author, parent, onComme
 
     return (
         <div className={styles.commentContainer}>
-            <b className={styles.author}>{author}</b>
+            <b className={styles.author}>{user}</b>
             <textarea
                 id="comment"
                 className={styles.commentTextarea}

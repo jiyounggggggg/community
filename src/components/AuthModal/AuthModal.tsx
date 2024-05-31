@@ -7,6 +7,7 @@ import { faFacebook, faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { createUser, login } from "~/utils/api/users";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import { getCookie, setCookie } from "cookies-next";
 
 interface AuthModalProps {
   onClose: () => void;
@@ -54,8 +55,14 @@ const AuthModal: React.FC<AuthModalProps> = ({ onClose }) => {
       // Log in
       try {
         const { access, refresh } = await login(formData);
-        console.log("Access token:", access);
-        console.log("Refresh token:", refresh);
+        setCookie("accessToken", access);
+        setCookie("refreshToken", refresh);
+
+        console.log("Access token:", getCookie("accessToken"));
+        console.log("Refresh token:", getCookie("refreshToken"));
+
+        // console.log("Access token:", access);
+        // console.log("Refresh token:", refresh);
         localStorage.setItem("access", access);
         localStorage.setItem("refresh", refresh);
         setFormData({

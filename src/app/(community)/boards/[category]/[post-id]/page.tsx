@@ -1,51 +1,59 @@
-import { fetchComments } from '~/utils/api';
-import type { Comment } from '~/utils/api';
-import CommentList from '~/components/comments/CommentList';
-import Link from 'next/link';
-import { auth } from '@clerk/nextjs/server';
-import PostDetail from '~/components/posts/PostDetail';
-import { getPost } from '~/utils/api/posts';
-import { getUserProfile } from '~/utils/api/users';
+import { fetchComments } from "~/utils/api";
+import type { Comment } from "~/utils/api";
+import CommentList from "~/components/comments/CommentList";
+import Link from "next/link";
+import PostDetail from "~/components/posts/PostDetail";
+import { getPost } from "~/utils/api/posts";
+import { cookies } from "next/headers";
+import { fetchCurrentUser, refreshToken } from "~/utils/api/users";
 
 interface PostPageProps {
   params: {
     category: string;
-    'post-id': string;
+    "post-id": string;
   };
 }
 
 export async function generateMetadata({ params }: PostPageProps) {
   return {
-    title: `Post ${params['post-id']}`,
+    title: `Post ${params["post-id"]}`,
   };
 }
 
-// todo fetchPost
-
 const PostPage: React.FC<PostPageProps> = async ({ params }) => {
-  const token = typeof window !== 'undefined' ? localStorage.getItem('access') : null;
-  console.log("typeof window: ", typeof window);
-  console.log("token: ", token);
-  const user = token ? await getUserProfile(token) : null;
-  console.log("user: ", user);
-
-  const postId = Number(params['post-id']);
-  const post = await getPost(params.category, params["post-id"]); // todo fetchPost
-  const initialComments: Comment[] = await fetchComments(postId);   // 댓글
-  const { userId } = auth();                                        // 로그인 정보
+  const cookieStore = cookies();
+  let token = cookieStore.get("accessToken");
+  let refreshTokenValue = cookieStore.get("refreshToken");
+  let currentUser = token ? await fetchCurrentUser(token.value) : null; // 로그인사용자 정보
+  if (!currentUser && refreshTokenValue) {
+    const newTokens = await refreshToken(refreshTokenValue.value);
+    if (newTokens) {
+      token = newTokens.access;
+      cookieStore.set("accessToken", token, { path: "/" });
+      cookieStore.set("refreshToken", newTokens.refresh, { path: "/" });
+      currentUser = await fetchCurrentUser(token);
+    }
+  }
+  const postId = Number(params["post-id"]);
+  const post = await getPost(postId);
+  const initialComments: Comment[] = await fetchComments(postId); // 댓글
 
   return (
     <>
       <section className="flex flex-row-reverse">
         <Link href={`/boards/${params.category}`}>
-          <button className="border p-1 my-1">목록</button>
+          <button className="my-1 border p-1">목록</button>
         </Link>
       </section>
 
       <PostDetail boradName={params.category} post={post} />
 
       <section>
-        <CommentList initialComments={initialComments} postId={postId} author={userId} />
+        <CommentList
+          initialComments={initialComments}
+          postId={postId}
+          user={currentUser?.id}
+        />
       </section>
     </>
   );

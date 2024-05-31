@@ -34,7 +34,7 @@ const PostDetail: React.FC<PostDetailProps> = ({ boradName, post }) => {
 
             <footer className="text-center mb-2">
                 <button className="border rounded-full p-2 hover:text-sky-600 text-slate-600">
-                    <FontAwesomeIcon icon={faThumbsUp} />
+                    <FontAwesomeIcon icon={faThumbsUp} className="h-4"/>
                     <b className="ml-1">101</b>
                 </button>
             </footer>
