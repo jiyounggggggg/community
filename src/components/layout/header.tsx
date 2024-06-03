@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 // import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 import AuthModal from "../AuthModal/AuthModal";
 import Profile from "../Profile/Profile";
+import { Link } from "lucide-react";
 
 export default function Header() {
   const showMenu = () => {

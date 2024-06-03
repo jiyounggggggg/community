@@ -28,7 +28,7 @@ const NewPostPage: React.FC<NewPostPageProps> = ({ params }) => {
       setError("로그인이 필요합니다.");
       return;
     }
-    
+
     try {
       await createPost(
         { board: Number(boardId), title, content, created_by: user.id },

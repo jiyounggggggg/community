@@ -1,15 +1,15 @@
-import { fetchComments } from "~/utils/api";
-import type { Comment } from "~/utils/api";
+import type { CommentData } from "~/types/comments";
 import CommentList from "~/components/comments/CommentList";
 import Link from "next/link";
 import PostDetail from "~/components/posts/PostDetail";
-import { getPost } from "~/utils/api/posts";
+import { getPost } from "~/app/api/posts";
 import { cookies } from "next/headers";
-import { fetchCurrentUser, refreshToken } from "~/utils/api/users";
+import { getCurrentUser, refreshToken } from "~/app/api/users";
+import { getComments } from "~/app/api/comments";
 
 interface PostPageProps {
   params: {
-    category: string;
+    "board-id": string;
     "post-id": string;
   };
 }
@@ -23,30 +23,31 @@ export async function generateMetadata({ params }: PostPageProps) {
 const PostPage: React.FC<PostPageProps> = async ({ params }) => {
   const cookieStore = cookies();
   let token = cookieStore.get("accessToken");
-  let refreshTokenValue = cookieStore.get("refreshToken");
-  let currentUser = token ? await fetchCurrentUser(token.value) : null; // 로그인사용자 정보
+  const refreshTokenValue = cookieStore.get("refreshToken");
+  let currentUser = token ? await getCurrentUser(token.value) : null; // 로그인사용자 정보
   if (!currentUser && refreshTokenValue) {
     const newTokens = await refreshToken(refreshTokenValue.value);
     if (newTokens) {
       token = newTokens.access;
       cookieStore.set("accessToken", token, { path: "/" });
       cookieStore.set("refreshToken", newTokens.refresh, { path: "/" });
-      currentUser = await fetchCurrentUser(token);
+      currentUser = await getCurrentUser(token);
     }
   }
+
   const postId = Number(params["post-id"]);
   const post = await getPost(postId);
-  const initialComments: Comment[] = await fetchComments(postId); // 댓글
+  const initialComments: CommentData[] = await getComments(postId); // 댓글
 
   return (
     <>
       <section className="flex flex-row-reverse">
-        <Link href={`/boards/${params.category}`}>
+        <Link href={`/boards/${params["board-id"]}`}>
           <button className="my-1 border p-1">목록</button>
         </Link>
       </section>
 
-      <PostDetail boradName={params.category} post={post} />
+      <PostDetail boradName={params["board-id"]} post={post} />
 
       <section>
         <CommentList

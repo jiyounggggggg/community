@@ -1,9 +1,11 @@
-import { faFilter, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
+import { faFilter } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { getPosts } from "~/app/api/posts";
 import Badge from "~/components/Badge/Badge";
 import PostList from "~/components/posts/PostList";
-import { getPosts } from "~/utils/api/posts";
+import type { PostData } from "~/types/posts";
 
+// todo delete
 const categories: string[] = [
   "기술",
   "뉴스",
@@ -23,30 +25,23 @@ const categories: string[] = [
   "엔터테인먼트",
 ];
 
-export default async function CategoryPage({
-  params
-}: {
-  params: { category: string };
-}) {
+interface BoardPageParams {
+  "board-id": number;
+}
 
-  const posts = await getPosts(Number(params.category));
-  function formatDateTime(datetime) {
-    const date = new Date(datetime);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-    const hours = String(date.getHours()).padStart(2, "0");
-    const minutes = String(date.getMinutes()).padStart(2, "0");
+interface BoardPageProps {
+  params: BoardPageParams;
+}
 
-    return `${year}.${month}.${day} ${hours}:${minutes}`;
-  }
+export default async function BoardPage({ params }: BoardPageProps) {
+  const posts: PostData[] = await getPosts(params["board-id"]);
 
   return (
     <>
       <section>
         <header className="border-b-2">
           <h1 className="text-2xl">
-            <strong>{params.category}</strong>
+            <strong>{params["board-id"]}</strong>
           </h1>
           <small>description</small>
           <nav className="my-3">
@@ -57,13 +52,17 @@ export default async function CategoryPage({
             <ul className="flex flex-wrap gap-1">
               <li key={categories[0]} className="category-item">
                 <button>
-                  <Badge data={categories[0]} />
+                  {categories.map((category) => (
+                    <Badge key={category.id} data={category} />
+                  ))
+                  }
+                  {/* <Badge data="{categories[0]}" /> */}
                 </button>
               </li>
               {/* {categories.map((category) => (
                 <li key={category} className="category-item"> */}
-                  {/* <a href={`/category/${category.name}`}>{category.name}</a> */}
-                  {/* <button>
+              {/* <a href={`/category/${category.name}`}>{category.name}</a> */}
+              {/* <button>
                     <Badge data={category} />
                   </button>
                 </li> */}
@@ -72,7 +71,7 @@ export default async function CategoryPage({
           </nav>
         </header>
 
-        <PostList boardId={Number(params.category)} />
+        <PostList posts={posts} />
 
         <section className="flex flex-row-reverse">
           <a href="/boards/1/new">

@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './Badge.module.css';
 
 interface BadgeProps {
-    count: number;
+    data: string
 }
 
 const Badge: React.FC<BadgeProps> = ({ data }) => {

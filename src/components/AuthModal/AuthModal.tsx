@@ -5,7 +5,7 @@ import styles from "./AuthModal.module.css";
 import Link from "next/link";
 import { faFacebook, faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { createUser, login } from "~/utils/api/users";
+import { createUser, login } from "~/app/api/users";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { getCookie, setCookie } from "cookies-next";
 
@@ -85,7 +85,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ onClose }) => {
 
   const handleBlur = (field: string) => {
     if (formData[field] === "") {
-        setIsFocused({ ...isFocused, [field]: false });
+      setIsFocused({ ...isFocused, [field]: false });
     }
   };
 
@@ -241,7 +241,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ onClose }) => {
           <button
             type="submit"
             className={`${styles.submitButton} ${styles.active}`}
-            // disabled={!isFormValid}
+          // disabled={!isFormValid}
           >
             {isSignup ? "Sign Up" : "Log In"}
           </button>

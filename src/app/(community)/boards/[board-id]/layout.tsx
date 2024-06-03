@@ -1,4 +1,4 @@
-export default function CategoryLayout({
+export default function BoardLayout({
   children,
 }: {
   children: React.ReactNode;

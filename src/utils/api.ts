@@ -1,27 +1,28 @@
-import axios from 'axios';
+import axios from "axios";
+import type { AxiosRequestConfig } from "axios";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000/api';
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000/api";
 
-// 댓글
-export interface Comment {
-    id: number;
-    post: number;
-    parent: number | undefined;
-    content: string;
-    created_at: string;
-    updated_at: string;
-    created_by: string;
-    replies: Comment[];
+interface ApiConfig extends AxiosRequestConfig {
+    baseURL?: string;
 }
 
-// 댓글 조회
-export const fetchComments = async (postId: number) => {
-    const response = await axios.get(`${API_URL}/comments/?post=${postId}`);
-    return response.data;
-};
+export async function axiosRequest(endpoint: string, config: ApiConfig = {}) {
+    const { baseURL, ...axiosConfig } = config;
+    const url = `${baseURL ?? API_URL}${endpoint}`;
 
-// 댓글 등록
-export const createComment = async (content: { post: number; created_by: string; content: string; parent?: number }) => {
-    const response = await axios.post(`${API_URL}/comments/`, content);
-    return response.data;
-};
+    try {
+        const response = await axios({
+            url,
+            ...axiosConfig,
+            headers: {
+                'Content-Type': 'application/json',
+                ...axiosConfig.headers,
+            },
+        });
+
+        return response.data;
+    } catch (error) {
+        throw new Error(error.response?.data?.message || 'Failed to fetch data');
+    }
+}

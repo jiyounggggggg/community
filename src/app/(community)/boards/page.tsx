@@ -9,7 +9,7 @@ async function fetchPosts() {
   return res.json();
 }
 
-export default async function BoardPage() {
+export default async function BoardsPage() {
   const posts = await fetchPosts();
 
   return (

@@ -1,7 +1,7 @@
 import Image from "next/image";
 import BoardList from "~/components/boards/BoardList";
 
-export default function BoardLayout({
+export default function BoardsLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -9,7 +9,7 @@ export default function BoardLayout({
   return (
     <>
       <nav className="">
-        <h1 className="sr-only">community categories</h1>
+        <h1 className="sr-only">Boards</h1>
         <BoardList />
       </nav>
 
