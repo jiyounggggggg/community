@@ -1,6 +1,6 @@
 import { faFilter } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { getPosts } from "~/app/api/posts";
+import { getBoardPosts } from "~/app/api/boards";
 import Badge from "~/components/Badge/Badge";
 import PostList from "~/components/posts/PostList";
 import type { PostData } from "~/types/posts";
@@ -34,16 +34,17 @@ interface BoardPageProps {
 }
 
 export default async function BoardPage({ params }: BoardPageProps) {
-  const posts: PostData[] = await getPosts(params["board-id"]);
+  const boardPosts = await getBoardPosts(params["board-id"]);
+  const posts: PostData[] = boardPosts.posts
 
   return (
     <>
       <section>
         <header className="border-b-2">
           <h1 className="text-2xl">
-            <strong>{params["board-id"]}</strong>
+            <strong>{boardPosts.board.name}</strong>
           </h1>
-          <small>description</small>
+          <small>{boardPosts.board.description}</small>
           <nav className="my-3">
             <button className="my-1 rounded p-1 hover:bg-slate-200">
               <FontAwesomeIcon icon={faFilter} className="h-4" />
@@ -63,15 +64,15 @@ export default async function BoardPage({ params }: BoardPageProps) {
                 <li key={category} className="category-item"> */}
               {/* <a href={`/category/${category.name}`}>{category.name}</a> */}
               {/* <button>
-                    <Badge data={category} />
-                  </button>
+                    <Badge data={category} />2222
+                  </button>2222
                 </li> */}
               {/* ))} */}
             </ul>
           </nav>
         </header>
 
-        <PostList posts={posts} />
+        <PostList boardId={params["board-id"]} posts={posts} />
 
         <section className="flex flex-row-reverse">
           <a href="/boards/1/new">

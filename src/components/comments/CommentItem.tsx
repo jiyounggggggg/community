@@ -31,7 +31,7 @@ const CommentItem: React.FC<CommentItemProps> = ({ comment, onAddReply }) => {
     <div className="my-3">
       <div className="flex items-center gap-3">
         <Profile src="/noidea.jpeg" alt="Profile Image" size={35} />
-        <b className="text-xs">{comment.created_by}</b>
+        <b className="text-xs">{comment.username}</b>
         <small className="text-slate-400">
           {format(comment.created_at, "yyyy.MM.dd. HH:MM")}
         </small>

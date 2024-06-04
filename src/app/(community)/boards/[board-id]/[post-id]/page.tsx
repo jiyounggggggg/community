@@ -9,8 +9,8 @@ import { getComments } from "~/app/api/comments";
 
 interface PostPageProps {
   params: {
-    "board-id": string;
-    "post-id": string;
+    "board-id": number;
+    "post-id": number;
   };
 }
 
@@ -34,8 +34,11 @@ const PostPage: React.FC<PostPageProps> = async ({ params }) => {
       currentUser = await getCurrentUser(token);
     }
   }
+  console.log("token: ", token);
+  console.log("currentUser: ", currentUser);
+  console.log("refreshTokenValue: ", refreshTokenValue);
 
-  const postId = Number(params["post-id"]);
+  const postId = params["post-id"];
   const post = await getPost(postId);
   const initialComments: CommentData[] = await getComments(postId); // 댓글
 
@@ -47,13 +50,13 @@ const PostPage: React.FC<PostPageProps> = async ({ params }) => {
         </Link>
       </section>
 
-      <PostDetail boradName={params["board-id"]} post={post} />
+      <PostDetail boardId={params["board-id"]} post={post} />
 
       <section>
         <CommentList
           initialComments={initialComments}
           postId={postId}
-          user={currentUser?.id}
+          user={currentUser?.username}
         />
       </section>
     </>

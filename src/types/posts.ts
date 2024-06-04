@@ -7,4 +7,6 @@ export interface PostData {
   updated_at: string;
   views: number;
   comment_count: number;
+  board_name: string;
+  username: string;
 }

@@ -1,14 +1,13 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { fetchComments } from "~/utils/api";
-import type { Comment } from "~/utils/api";
+import { getComments } from "~/app/api/comments";
+import type { CommentData } from "~/types/comments";
 import CommentBox from "./CommentBox";
 import CommentItem from "./CommentItem";
-import { comment } from "postcss";
 
 interface CommentListProps {
-  initialComments: Comment[];
+  initialComments: CommentData[];
   postId: number;
   user: string;
 }
@@ -18,13 +17,13 @@ const CommentList: React.FC<CommentListProps> = ({
   postId,
   user,
 }) => {
-  const [comments, setComments] = useState<Comment[]>(initialComments);
+  const [comments, setComments] = useState<CommentData[]>(initialComments);
   const [loading, setLoading] = useState(false);
 
   const fetchAndSetComments = async (parent = null) => {
     setLoading(true);
     try {
-      const updatedComments: Comment[] = await fetchComments(postId);
+      const updatedComments: CommentData[] = await getComments(postId);
       setComments(updatedComments);
     } catch (error) {
       console.error("Error fetching comments:", error);
@@ -32,18 +31,18 @@ const CommentList: React.FC<CommentListProps> = ({
       setLoading(false);
     }
 
-    if (parent) { 
+    if (parent) {
       // 대댓글 처리
-    //   setComments((prevComments) =>
-        // prevComments.map((comment) =>
-        //   comment.id === parentId
-        //     ? { ...comment, replies: [...comment.replies, newComment] }
-        //     : comment,
-        // ),
-    //   )
+      //   setComments((prevComments) =>
+      // prevComments.map((comment) =>
+      //   comment.id === parentId
+      //     ? { ...comment, replies: [...comment.replies, newComment] }
+      //     : comment,
+      // ),
+      //   )
     } else {
       // 일반 댓글 처리
-    //   setComments((prevComments) => [...prevComments, newComment]);
+      //   setComments((prevComments) => [...prevComments, newComment]);
     }
   };
 
