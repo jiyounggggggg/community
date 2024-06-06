@@ -1,7 +1,6 @@
 import { axiosRequest } from "~/utils/api";
-import type { PostData } from "~/types/posts";
 
-export async function createPost(data: PostData, token: string) {
+export async function createPost(data: { board: number, title: string, content: string, created_by: number }, token: string) {
     return axiosRequest(`/posts/`, {
         method: 'POST',
         data: JSON.stringify(data),

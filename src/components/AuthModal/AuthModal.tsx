@@ -54,6 +54,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ onClose }) => {
     } else {
       // Log in
       try {
+        console.log("login!!!!!!!!!")
         const { access, refresh } = await login(formData);
         setCookie("accessToken", access);
         setCookie("refreshToken", refresh);

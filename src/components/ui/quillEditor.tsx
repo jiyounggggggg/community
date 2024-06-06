@@ -1,9 +1,9 @@
 "use client";
-import React, { useState, FC } from "react";
+
+import React, { type useState, type FC } from "react";
 import dynamic from "next/dynamic";
-import { ReactQuillProps } from "react-quill";
+import { type ReactQuillProps } from "react-quill";
 import Dropdown from "./dropdown";
-import { useUser } from "@clerk/nextjs";
 
 // 동적으로 ReactQuill 컴포넌트를 로드하고 SSR은 비활성화합니다.
 const ReactQuill = dynamic<ReactQuillProps>(() => import("react-quill"), {
@@ -16,12 +16,17 @@ const ReactQuill = dynamic<ReactQuillProps>(() => import("react-quill"), {
 // }
 
 const modules = {
-  toolbar: [
-    [{ header: 1 }, { header: 2 }],
-    ["bold", "italic", "underline", "strike"],
-    ["link", "image", "video"],
-    ["clean"],
-  ],
+  toolbar: {
+    container: [
+      [{ header: 1 }, { header: 2 }],
+      ["bold", "italic", "underline", "strike"],
+      ["link", "image", "video"],
+      ["clean"],
+    ],
+    handlers: {
+      image: imageHandler,
+    }
+  },
 };
 
 const formats = [
@@ -35,9 +40,41 @@ const formats = [
   "video",
 ];
 
+function imageHandler() {
+  console.log("imageHandeler!");
+  const input = document.createElement('input');
+  input.setAttribute('type', 'file');
+  input.setAttribute('accept', 'image/*');
+  input.click();
+
+  input.onchange = async () => {
+    const file = input.files[0];
+    if (file) {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      try {
+        const response = await fetch('/uploadthing/imageUploader', {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          const range = quill.getSelection();
+          quill.insertEmbed(range.index, 'image', data.fileUrl); // fileUrl은 서버에서 반환되는 URL 속성 이름에 따라 변경
+        } else {
+          console.error('Upload failed:', response.statusText);
+        }
+      } catch (error) {
+        console.error('Upload error:', error);
+      }
+    }
+  };
+}
+
 const QuillEditor: FC = () => {
   const [value, setValue] = useState<string>("");
-  const { isLoaded, isSignedIn, user } = useUser();
   const [title, setTitle] = useState("");
   // const [author, setAuthor] = useState("");
   const [content, setContent] = useState("");
@@ -59,46 +96,10 @@ const QuillEditor: FC = () => {
     source: string,
     editor: any,
   ): void => {
+    console.log("change.contetn", editor.getHTML);
     setContent(editor.getHTML());
     setValue(editor.getHTML()); // 또는 content를 사용
     // if (onContentChange) onContentChange(editor.getHTML());
-  };
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-
-    // Validation
-    if (!title || !content) {
-      // setError("값를 입력해보세요");
-      alert("값를 입력해보세요");
-      return;
-    }
-
-    // console.log("title: ", title, "author: ", author, "content: ", content);
-
-    // Django API 호출
-    const response = await fetch("http://localhost:8000/api/post/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-
-      body: JSON.stringify({
-        title,
-        author,
-        content,
-      }),
-    });
-
-    if (response.ok) {
-      const post = await response.json();
-      console.log("Post created", post);
-
-      // router.push('/community');
-    } else {
-      console.error("Error creating post");
-      setError("error");
-    }
   };
 
   return (
@@ -116,7 +117,7 @@ const QuillEditor: FC = () => {
           placeholder="제목을 입력해주세요"
           className="mb-2 w-full border p-1"
         ></input>
-        <form onSubmit={handleSubmit}>
+        <form>
           <ReactQuill
             theme="snow"
             value={value}

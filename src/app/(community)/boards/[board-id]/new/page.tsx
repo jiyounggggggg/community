@@ -1,24 +1,24 @@
 "use client";
-// import { useRouter } from "next/router";
+
 import { useState } from "react";
 import QuillEditor from "~/components/posts/QuillEditor";
-import { createPost } from "~/utils/api/posts";
-import useAuth from '~/hooks/useAuth';
+import { createPost } from "~/app/api/posts";
+import { UploadButton } from "~/utils/uploadthing";
+import "@uploadthing/react/styles.css";
+
 
 interface NewPostPageProps {
   params: {
-    category: string;
+    "board-id": number;
   };
 }
 
 const NewPostPage: React.FC<NewPostPageProps> = ({ params }) => {
-  const { user, loading } = useAuth();
-  const boardId = params.category;
+  const boardId = params["board-id"];
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
-  // const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     console.log("title: ", title, "content: ", content);
@@ -30,8 +30,9 @@ const NewPostPage: React.FC<NewPostPageProps> = ({ params }) => {
     }
 
     try {
+      console.log("boardId: ", boardId);
       await createPost(
-        { board: Number(boardId), title, content, created_by: user.id },
+        { board: Number(boardId), title, content, created_by: 1 },
         token,
       );
       setSuccess(true);
@@ -45,7 +46,7 @@ const NewPostPage: React.FC<NewPostPageProps> = ({ params }) => {
   return (
     <>
       <div>
-        <h1>NewPostPage</h1>
+        <h1></h1>
       </div>
 
       <form onSubmit={handleSubmit}>
@@ -65,12 +66,25 @@ const NewPostPage: React.FC<NewPostPageProps> = ({ params }) => {
         {error && <p>{error}</p>}
         {success && <p>게시글이 성공적으로 작성되었습니다.</p>}
         <button
-          className="mt-2 w-full rounded-md border p-1 hover:bg-slate-200"
+          className="mt-5 w-full rounded-md border p-1 hover:bg-slate-200"
           type="submit"
         >
           등록
         </button>
       </form>
+
+      <UploadButton
+        endpoint="imageUploader"
+        onClientUploadComplete={(res) => {
+          // Do something with the response
+          console.log("Files: ", res);
+          alert("Upload Completed");
+        }}
+        onUploadError={(error: Error) => {
+          // Do something with the error.
+          alert(`ERROR! ${error.message}`);
+        }}
+      />
     </>
   );
 };

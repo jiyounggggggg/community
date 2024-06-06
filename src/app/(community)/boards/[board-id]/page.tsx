@@ -57,17 +57,8 @@ export default async function BoardPage({ params }: BoardPageProps) {
                     <Badge key={category.id} data={category} />
                   ))
                   }
-                  {/* <Badge data="{categories[0]}" /> */}
                 </button>
               </li>
-              {/* {categories.map((category) => (
-                <li key={category} className="category-item"> */}
-              {/* <a href={`/category/${category.name}`}>{category.name}</a> */}
-              {/* <button>
-                    <Badge data={category} />2222
-                  </button>2222
-                </li> */}
-              {/* ))} */}
             </ul>
           </nav>
         </header>

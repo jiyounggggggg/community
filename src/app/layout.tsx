@@ -2,9 +2,8 @@ import "~/styles/globals.css";
 import "react-quill/dist/quill.snow.css";
 import { Inter } from "next/font/google";
 import Header from "~/components/layout/header";
-import { Metadata } from "next";
+import type { Metadata } from "next";
 import Nav from "~/components/layout/nav";
-import { ClerkProvider } from "@clerk/nextjs";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -76,14 +75,12 @@ export default function RootLayout({
 }) {
 
   return (
-    <ClerkProvider>
-      <html lang="en">
-        <body className={`mx-auto w-4/5 font-sans mb-4 ${inter.variable}`}>
-          <Header />
-          <Nav />
-          <main>{children}</main>
-        </body>
-      </html>
-    </ClerkProvider>
+    <html lang="en">
+      <body className={`mx-auto w-4/5 font-sans mb-4 ${inter.variable}`}>
+        <Header />
+        <Nav />
+        <main>{children}</main>
+      </body>
+    </html>
   );
 }
