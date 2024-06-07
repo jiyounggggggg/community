@@ -1,14 +1,15 @@
 'use client';
 
 import React, { useState } from 'react';
-import { createComment } from '../../utils/api';
+import { createComment } from '~/app/api/comments';
 import styles from './Comment.module.css';
+import { UserData } from '~/types/users';
 
 interface CommentBoxProps {
     postId: number;
-    user: string;
+    user: UserData;
     parent: number | undefined;
-    onCommentAdded: () => void;
+    onCommentAdded: (parent: number | undefined) => void;
 }
 
 const CommentBox: React.FC<CommentBoxProps> = ({ postId, user, parent, onCommentAdded }) => {
@@ -21,7 +22,7 @@ const CommentBox: React.FC<CommentBoxProps> = ({ postId, user, parent, onComment
         }
 
         try {
-            await createComment({ post: postId, created_by: user, content, parent });
+            await createComment({ post: postId, created_by: user.id, content, parent });
             setContent('');
             onCommentAdded(parent);
         } catch (error) {
@@ -32,7 +33,7 @@ const CommentBox: React.FC<CommentBoxProps> = ({ postId, user, parent, onComment
 
     return (
         <div className={styles.commentContainer}>
-            <b className={styles.author}>{user}</b>
+            <b className={styles.author}>{user.username}</b>
             <textarea
                 id="comment"
                 className={styles.commentTextarea}

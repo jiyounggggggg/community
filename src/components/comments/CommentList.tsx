@@ -5,11 +5,12 @@ import { getComments } from "~/app/api/comments";
 import type { CommentData } from "~/types/comments";
 import CommentBox from "./CommentBox";
 import CommentItem from "./CommentItem";
+import { UserData } from "~/types/users";
 
 interface CommentListProps {
   initialComments: CommentData[];
   postId: number;
-  user: string;
+  user: UserData;
 }
 
 const CommentList: React.FC<CommentListProps> = ({
@@ -20,7 +21,7 @@ const CommentList: React.FC<CommentListProps> = ({
   const [comments, setComments] = useState<CommentData[]>(initialComments);
   const [loading, setLoading] = useState(false);
 
-  const fetchAndSetComments = async (parent = null) => {
+  const fetchAndSetComments = async (parent = undefined) => {
     setLoading(true);
     try {
       const updatedComments: CommentData[] = await getComments(postId);
@@ -69,7 +70,7 @@ const CommentList: React.FC<CommentListProps> = ({
         <ul className="my-10">
           {comments.map((comment) => (
             <li key={comment.id} className="my-5">
-              <CommentItem comment={comment} onAddReply={fetchAndSetComments} />
+              <CommentItem comment={comment} user={user} onAddReply={fetchAndSetComments} />
             </li>
           ))}
         </ul>

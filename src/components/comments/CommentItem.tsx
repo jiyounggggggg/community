@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { fetchComments, type Comment } from "../../utils/api";
 import Profile from "../Profile/Profile";
 import { format } from "date-fns";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -10,13 +9,16 @@ import {
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import CommentBox from "./CommentBox";
+import { UserData } from "~/types/users";
+import { CommentData } from "~/types/comments";
 
 interface CommentItemProps {
-  comment: Comment;
+  comment: CommentData;
+  user: UserData;
   onAddReply: () => void;
 }
 
-const CommentItem: React.FC<CommentItemProps> = ({ comment, onAddReply }) => {
+const CommentItem: React.FC<CommentItemProps> = ({ comment, user, onAddReply }) => {
   const [showReplyBox, setShowReplyBox] = useState(false);
   const toggleReplyBox = () => {
     setShowReplyBox(!showReplyBox);
@@ -74,7 +76,7 @@ const CommentItem: React.FC<CommentItemProps> = ({ comment, onAddReply }) => {
         {showReplyBox && (
           <CommentBox
             postId={comment.post}
-            user={comment.created_by}
+            user={user}
             parent={comment.id}
             onCommentAdded={fetchAndSetReplies}
           />

@@ -47,7 +47,7 @@ export async function getUserProfile(token: string) {
 export async function refreshToken(refreshToken: string) {
   try {
     return axiosRequest("/token/refresh/", {
-      refresh: refreshToken,
+      refresh: refreshToken
     });
   } catch (error) {
     console.error("Error refreshing token:", error);

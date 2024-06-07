@@ -56,7 +56,7 @@ const PostPage: React.FC<PostPageProps> = async ({ params }) => {
         <CommentList
           initialComments={initialComments}
           postId={postId}
-          user={currentUser?.username}
+          user={currentUser}
         />
       </section>
     </>

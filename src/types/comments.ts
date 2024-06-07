@@ -7,4 +7,5 @@ export interface CommentData {
   updated_at: string;
   created_by: string;
   replies: Comment[];
+  username: string;
 }

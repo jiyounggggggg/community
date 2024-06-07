@@ -32,7 +32,7 @@ const NewPostPage: React.FC<NewPostPageProps> = ({ params }) => {
     try {
       console.log("boardId: ", boardId);
       await createPost(
-        { board: Number(boardId), title, content, created_by: 1 },
+        { board: Number(boardId), title, content, created_by: 7 },
         token,
       );
       setSuccess(true);
