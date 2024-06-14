@@ -8,12 +8,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { createUser, login } from "~/app/api/users";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { getCookie, setCookie } from "cookies-next";
+import axios from "axios";
+import { axiosRequest } from "~/utils/api";
 
 interface AuthModalProps {
   onClose: () => void;
+  setUser: (user: boolean) => void;
 }
 
-const AuthModal: React.FC<AuthModalProps> = ({ onClose }) => {
+const AuthModal: React.FC<AuthModalProps> = ({ onClose, setUser }) => {
   const [formData, setFormData] = React.useState({
     email: "",
     username: "",
@@ -47,6 +50,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ onClose }) => {
           password: "",
           phone_number: "",
         });
+        onClose();
       } catch (error) {
         console.error("Error creating user:", error);
         alert("사용자 등록 중 오류가 발생했습니다.");
@@ -54,23 +58,36 @@ const AuthModal: React.FC<AuthModalProps> = ({ onClose }) => {
     } else {
       // Log in
       try {
-        console.log("login!!!!!!!!!")
-        const { access, refresh } = await login(formData);
-        setCookie("accessToken", access);
-        setCookie("refreshToken", refresh);
+        await axios.post('/api/auth/login', { username: formData.username, password: formData.password });
+        // const data = await axiosRequest<{ access: string }>('/api/auth/login', {
+        //   method: 'POST',
+        //   data: { username: formData.username, password: formData.password },
+        // });
 
-        console.log("Access token:", getCookie("accessToken"));
-        console.log("Refresh token:", getCookie("refreshToken"));
+        // JWT 토큰을 로컬 스토리지에 저장
+        // localStorage.setItem("access", data.access);
+        // localStorage.setItem("refresh", data.refresh);
+
+        // setCookie("accessToken", data.access);
+        // setCookie("refreshToken", data.refresh);
+
+
+        // const { access, refresh } = await login(formData);
+        // setCookie("accessToken", access);
+        // setCookie("refreshToken", refresh);
+
+        // console.log("Access token:", getCookie("accessToken"));
+        // console.log("Refresh token:", getCookie("refreshToken"));
 
         // console.log("Access token:", access);
         // console.log("Refresh token:", refresh);
-        localStorage.setItem("access", access);
-        localStorage.setItem("refresh", refresh);
+
         setFormData({
           ...formData,
           username: "",
           password: "",
         });
+        setUser(true);
         onClose();
       } catch (error) {
         console.error("Error creating user:", error);

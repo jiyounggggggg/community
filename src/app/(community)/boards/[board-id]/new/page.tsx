@@ -5,6 +5,8 @@ import QuillEditor from "~/components/posts/QuillEditor";
 import { createPost } from "~/app/api/posts";
 import { UploadButton } from "~/utils/uploadthing";
 import "@uploadthing/react/styles.css";
+import axios from "axios";
+import { promises } from "dns";
 
 
 interface NewPostPageProps {
@@ -23,17 +25,28 @@ const NewPostPage: React.FC<NewPostPageProps> = ({ params }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     console.log("title: ", title, "content: ", content);
     e.preventDefault();
-    const token = localStorage.getItem("access");
-    if (!token) {
+
+    //
+    const response = await axios.get('/api/auth/user');
+    console.log("response: ", response);
+    console.log("response.data: ", response.data);
+    // const user = response.data;
+    if (!response.data) {
       setError("로그인이 필요합니다.");
       return;
     }
 
+    // const token = localStorage.getItem("access");
+    // console.log("token: ", token);
+    // if (!token) {
+    //   setError("로그인하지 않음.");
+    //   return;
+    // }
+
     try {
       console.log("boardId: ", boardId);
       await createPost(
-        { board: Number(boardId), title, content, created_by: 7 },
-        token,
+        { board: Number(boardId), title, content, created_by: Number(response.data.id) },
       );
       setSuccess(true);
       setError("");
@@ -72,19 +85,6 @@ const NewPostPage: React.FC<NewPostPageProps> = ({ params }) => {
           등록
         </button>
       </form>
-
-      <UploadButton
-        endpoint="imageUploader"
-        onClientUploadComplete={(res) => {
-          // Do something with the response
-          console.log("Files: ", res);
-          alert("Upload Completed");
-        }}
-        onUploadError={(error: Error) => {
-          // Do something with the error.
-          alert(`ERROR! ${error.message}`);
-        }}
-      />
     </>
   );
 };

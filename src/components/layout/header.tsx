@@ -7,14 +7,13 @@ import {
   faRightToBracket,
 } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
-// import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 import AuthModal from "../AuthModal/AuthModal";
 import Profile from "../Profile/Profile";
-import { Link } from "lucide-react";
+import axios from "axios";
 
 export default function Header() {
   const showMenu = () => {
-    let menu = document.getElementById("navMain") as HTMLDivElement;
+    const menu = document.getElementById("navMain") as HTMLDivElement;
     menu.classList.remove("close");
     menu.classList.add("open");
   };
@@ -26,18 +25,21 @@ export default function Header() {
 
   // 사용자
   const [user, setUser] = useState(false);
-  const token = typeof window !== "undefined" && localStorage.getItem("access");
 
   useEffect(() => {
     const fetchUser = async () => {
-      const token = localStorage.getItem("access");
-      if (token) {
-        setUser(true);
+      try {
+        const response = await axios.get('/api/auth/user');
+        if (response.data) {
+          setUser(true);
+        }
+      } catch (error) {
+        setUser(false);
       }
     };
 
     fetchUser();
-  }, [token]);
+  }, []);
 
   // 로그아웃
   const logout = () => {
@@ -106,7 +108,7 @@ export default function Header() {
           </button>
         </div>
       </header>
-      {isAuthModalOpen && <AuthModal onClose={closeAuthModal} />}
+      {isAuthModalOpen && <AuthModal onClose={closeAuthModal} setUser={setUser} />}
     </>
   );
 }

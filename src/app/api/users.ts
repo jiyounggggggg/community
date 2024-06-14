@@ -1,3 +1,4 @@
+import { UserData } from "~/types/users";
 import { axiosRequest } from "~/utils/api";
 
 // 신규 사용자 등록
@@ -22,7 +23,7 @@ export async function login(data: { username: string; password: string }) {
 }
 
 // 현재 로그인 사용자 조회
-export async function getCurrentUser(token: string) {
+export async function getCurrentUser(token: string): Promise<UserData | null> {
   try {
     return axiosRequest("/users/me/", {
       headers: {

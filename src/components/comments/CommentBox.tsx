@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { createComment } from '~/app/api/comments';
 import styles from './Comment.module.css';
-import { UserData } from '~/types/users';
+import { type UserData } from '~/types/users';
 
 interface CommentBoxProps {
     postId: number;

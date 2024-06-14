@@ -1,12 +1,14 @@
 import { axiosRequest } from "~/utils/api";
 
-export async function createPost(data: { board: number, title: string, content: string, created_by: number }, token: string) {
+export async function createPost(data: { board: number, title: string, content: string, created_by: number }) {
     return axiosRequest(`/posts/`, {
         method: 'POST',
-        data: JSON.stringify(data),
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
+        data,
+        withCredentials: true,
+        // data: JSON.stringify(data),
+        // headers: {
+        // Authorization: `Bearer ${token}`,
+        // },
     });
 }
 

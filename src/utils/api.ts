@@ -1,28 +1,49 @@
-import axios from "axios";
-import type { AxiosRequestConfig } from "axios";
+import axios, { type AxiosRequestConfig, type AxiosInstance, type Method } from 'axios';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000/api";
+// 기본 API URL
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://127.0.0.1:8000/api";
 
+// axios 인스턴스 생성
+const apiClient: AxiosInstance = axios.create({
+    baseURL: API_URL,
+    withCredentials: true,  // 쿠키를 포함한 요청
+    headers: {
+        'Content-Type': 'application/json',
+    },
+});
+
+// 요청 함수
 interface ApiConfig extends AxiosRequestConfig {
     baseURL?: string;
+    method?: Method;
 }
 
-export async function axiosRequest(endpoint: string, config: ApiConfig = {}) {
-    const { baseURL, ...axiosConfig } = config;
+export async function axiosRequest<T>(endpoint: string, config: ApiConfig = {}): Promise<T> {
+    const { baseURL, method = 'GET', ...axiosConfig } = config;
     const url = `${baseURL ?? API_URL}${endpoint}`;
 
     try {
-        const response = await axios({
-            url,
-            ...axiosConfig,
-            headers: {
-                'Content-Type': 'application/json',
-                ...axiosConfig.headers,
-            },
-        });
+        let response;
+        switch (method.toUpperCase() as Method) {
+            case 'GET':
+                response = await apiClient.get(url, axiosConfig);
+                break;
+            case 'POST':
+                response = await apiClient.post(url, axiosConfig.data, axiosConfig);
+                break;
+            case 'PUT':
+                response = await apiClient.put(url, axiosConfig.data, axiosConfig);
+                break;
+            case 'DELETE':
+                response = await apiClient.delete(url, axiosConfig);
+                break;
+            default:
+                throw new Error(`Unsupported method: ${method}`);
+        }
 
         return response.data;
-    } catch (error) {
-        throw new Error(error.response?.data?.message || 'Failed to fetch data');
+    } catch (error: any) {
+        const errorMessage = error.response?.data?.message || 'Failed to fetch data';
+        throw new Error(errorMessage);
     }
 }
